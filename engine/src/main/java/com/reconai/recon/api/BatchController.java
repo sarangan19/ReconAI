@@ -1,5 +1,6 @@
 package com.reconai.recon.api;
 
+import com.reconai.breaks.BreakRepository;
 import com.reconai.ingest.IngestionService;
 import com.reconai.recon.domain.Batch;
 import com.reconai.recon.domain.TxnSide;
@@ -10,10 +11,13 @@ import com.reconai.simulator.SimulatorResult;
 import com.reconai.simulator.SimulatorService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,15 +28,21 @@ public class BatchController {
     private final CanonicalTxnRepository ctxnRepo;
     private final SimulatorService simulator;
     private final IngestionService ingestion;
+    private final BreakRepository breakRepo;
+    private final JdbcTemplate jdbc;
 
     public BatchController(BatchRepository batches,
                            CanonicalTxnRepository ctxnRepo,
                            SimulatorService simulator,
-                           IngestionService ingestion) {
+                           IngestionService ingestion,
+                           BreakRepository breakRepo,
+                           JdbcTemplate jdbc) {
         this.batches   = batches;
         this.ctxnRepo  = ctxnRepo;
         this.simulator = simulator;
         this.ingestion = ingestion;
+        this.breakRepo = breakRepo;
+        this.jdbc      = jdbc;
     }
 
     // ── POST /api/batches ─────────────────────────────────────────────────
@@ -90,14 +100,29 @@ public class BatchController {
             .orElseThrow(() -> new EntityNotFoundException("Batch not found: " + id));
         long internal = ctxnRepo.countByBatchIdAndSide(id, TxnSide.INTERNAL);
         long external = ctxnRepo.countByBatchIdAndSide(id, TxnSide.EXTERNAL);
-        return ResponseEntity.ok(Map.of(
-            "batchId",       id,
-            "name",          batch.getName(),
-            "status",        batch.getStatus(),
-            "internalCount", internal,
-            "externalCount", external,
-            "totalCount",    internal + external
-        ));
+
+        // Pass stats (if reconciliation has run)
+        List<Map<String, Object>> passStats = jdbc.queryForList(
+            "SELECT pass_num, matched_count, elapsed_ms FROM pass_stat WHERE batch_id = ? ORDER BY pass_num", id);
+
+        // Break counts by type
+        Map<String, Long> breaksByType = new LinkedHashMap<>();
+        breakRepo.countByTypeForBatch(id).forEach(row ->
+            breaksByType.put(String.valueOf(row[0]), (Long) row[1]));
+
+        Map<String, Object> summary = new LinkedHashMap<>();
+        summary.put("batchId",       id);
+        summary.put("name",          batch.getName());
+        summary.put("status",        batch.getStatus());
+        summary.put("internalCount", internal);
+        summary.put("externalCount", external);
+        summary.put("totalCount",    internal + external);
+        summary.put("matchedCount",  ctxnRepo.countByBatchIdAndSide(id, TxnSide.INTERNAL) -
+                                     jdbc.queryForObject("SELECT COUNT(*) FROM canonical_txn WHERE batch_id = ? AND side = 'INTERNAL' AND status = 'UNMATCHED'", Long.class, id));
+        summary.put("passStats",     passStats);
+        summary.put("breaksByType",  breaksByType);
+        summary.put("totalBreaks",   breaksByType.values().stream().mapToLong(l -> l).sum());
+        return ResponseEntity.ok(summary);
     }
 
     // ── GET /api/batches/{id} ─────────────────────────────────────────────
