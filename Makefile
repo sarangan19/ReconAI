@@ -1,7 +1,9 @@
 .PHONY: up down test seed recon agent-eval bench
 
-N    ?= 10000
-SEED ?= 42
+N        ?= 10000
+SEED     ?= 42
+MODE     ?= rules
+BATCH_ID ?=
 ENGINE_URL ?= http://localhost:8080
 
 up:
@@ -21,10 +23,20 @@ seed:
 	  -H "Content-Type: application/json" | python3 -m json.tool
 
 recon:
-	@echo "not yet implemented (Phase 4)"
+	@if [ -z "$(BATCH_ID)" ]; then echo "Usage: make recon BATCH_ID=<id>"; exit 1; fi
+	@echo "Reconciling batch $(BATCH_ID)..."
+	@curl -s -X POST "$(ENGINE_URL)/api/batches/$(BATCH_ID)/reconcile" \
+	  -H "Content-Type: application/json" | python3 -m json.tool
 
 agent-eval:
-	@echo "not yet implemented (Phase 6)"
+	@if [ -z "$(BATCH_ID)" ]; then echo "Usage: make agent-eval BATCH_ID=<id> [MODE=rules|llm]"; exit 1; fi
+	@echo "Running agent eval: batch=$(BATCH_ID) mode=$(MODE)"
+	cd agent && python -m reconai.eval \
+	  --batch-id $(BATCH_ID) \
+	  --mode $(MODE) \
+	  --out-dir ../benchmarks \
+	  --verbose
 
 bench:
-	@echo "not yet implemented (Phase 7)"
+	@echo "Running full benchmark pipeline: N=$(N) SEED=$(SEED)"
+	@bash benchmarks/run_bench.sh $(N) $(SEED)
