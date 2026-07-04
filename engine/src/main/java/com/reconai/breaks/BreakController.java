@@ -3,6 +3,8 @@ package com.reconai.breaks;
 import com.reconai.matching.MatchingService;
 import com.reconai.matching.ReconcileResult;
 import com.reconai.recon.repository.BatchRepository;
+import com.reconai.workflow.VerdictRequest;
+import com.reconai.workflow.WorkflowService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +23,16 @@ public class BreakController {
     private final BreakRepository breaks;
     private final BatchRepository batches;
     private final JdbcTemplate jdbc;
+    private final WorkflowService workflow;
 
     public BreakController(MatchingService matching, BreakRepository breaks,
-                           BatchRepository batches, JdbcTemplate jdbc) {
-        this.matching = matching;
-        this.breaks   = breaks;
-        this.batches  = batches;
-        this.jdbc     = jdbc;
+                           BatchRepository batches, JdbcTemplate jdbc,
+                           WorkflowService workflow) {
+        this.matching  = matching;
+        this.breaks    = breaks;
+        this.batches   = batches;
+        this.jdbc      = jdbc;
+        this.workflow  = workflow;
     }
 
     // ── POST /api/batches/{id}/reconcile ──────────────────────────────────
@@ -82,6 +87,33 @@ public class BreakController {
         ));
     }
 
+    // ── POST /api/breaks/{id}/transition ─────────────────────────────────
+    @PostMapping("/api/breaks/{id}/transition")
+    public ResponseEntity<Map<String, Object>> transition(
+            @PathVariable long id,
+            @RequestBody TransitionRequest req) {
+        ReconBreak updated = workflow.transition(id, req.targetStatus(), req.actor(), req.note());
+        return ResponseEntity.ok(Map.of(
+            "breakId", updated.getId(),
+            "status",  updated.getStatus()
+        ));
+    }
+
+    // ── POST /api/breaks/{id}/verdict ─────────────────────────────────────
+    @PostMapping("/api/breaks/{id}/verdict")
+    public ResponseEntity<Map<String, String>> verdict(
+            @PathVariable long id,
+            @RequestBody VerdictRequest req) {
+        workflow.postVerdict(id, req);
+        return ResponseEntity.ok(Map.of("status", "accepted"));
+    }
+
+    // ── GET /api/breaks/{id}/context ──────────────────────────────────────
+    @GetMapping("/api/breaks/{id}/context")
+    public ResponseEntity<Map<String, Object>> context(@PathVariable long id) {
+        return ResponseEntity.ok(workflow.getContext(id));
+    }
+
     // ── Exception handlers ────────────────────────────────────────────────
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, String>> notFound(EntityNotFoundException ex) {
@@ -97,4 +129,6 @@ public class BreakController {
     public ResponseEntity<Map<String, String>> badRequest(IllegalArgumentException ex) {
         return ResponseEntity.status(400).body(Map.of("error", ex.getMessage()));
     }
+
+    public record TransitionRequest(String targetStatus, String actor, String note) {}
 }

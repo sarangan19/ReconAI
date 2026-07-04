@@ -41,4 +41,8 @@ public class ReconBreak {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getResolvedAt() { return resolvedAt; }
     public String getResolutionCode() { return resolutionCode; }
+
+    public void setStatus(String status) { this.status = status; }
+    public void setResolvedAt(Instant resolvedAt) { this.resolvedAt = resolvedAt; }
+    public void setResolutionCode(String resolutionCode) { this.resolutionCode = resolutionCode; }
 }
