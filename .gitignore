@@ -1,5 +1,6 @@
 # Java
 engine/target/
+engine/.jqwik-database
 *.class
 
 # Python
