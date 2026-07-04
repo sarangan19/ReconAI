@@ -1,0 +1,265 @@
+{
+  "batch_id": 105,
+  "mode": "rules",
+  "total_evaluated": 29,
+  "correct": 21,
+  "errors": 0,
+  "accuracy": 0.7241,
+  "per_type": {
+    "AMT_FAT_FINGER": {
+      "support": 2,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "DUP_EXTERNAL": {
+      "support": 8,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.667
+    },
+    "MISSING_EXTERNAL": {
+      "support": 9,
+      "precision": 1.0,
+      "recall": 0.556,
+      "f1": 0.714
+    },
+    "MISSING_INTERNAL": {
+      "support": 10,
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75
+    }
+  },
+  "confusion_matrix": {
+    "AMT_FAT_FINGER": {
+      "AMT_FAT_FINGER": 2,
+      "DUP_EXTERNAL": 0,
+      "MISSING_EXTERNAL": 0,
+      "MISSING_INTERNAL": 0
+    },
+    "DUP_EXTERNAL": {
+      "AMT_FAT_FINGER": 0,
+      "DUP_EXTERNAL": 8,
+      "MISSING_EXTERNAL": 0,
+      "MISSING_INTERNAL": 0
+    },
+    "MISSING_EXTERNAL": {
+      "AMT_FAT_FINGER": 0,
+      "DUP_EXTERNAL": 4,
+      "MISSING_EXTERNAL": 5,
+      "MISSING_INTERNAL": 0
+    },
+    "MISSING_INTERNAL": {
+      "AMT_FAT_FINGER": 0,
+      "DUP_EXTERNAL": 4,
+      "MISSING_EXTERNAL": 0,
+      "MISSING_INTERNAL": 6
+    }
+  },
+  "results": [
+    {
+      "break_id": 809,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 810,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 811,
+      "predicted": "MISSING_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 812,
+      "predicted": "MISSING_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 813,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 814,
+      "predicted": "MISSING_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 815,
+      "predicted": "MISSING_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 816,
+      "predicted": "MISSING_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 817,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_EXTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 818,
+      "predicted": "AMT_FAT_FINGER",
+      "actual": "AMT_FAT_FINGER",
+      "correct": true,
+      "confidence": 0.72
+    },
+    {
+      "break_id": 819,
+      "predicted": "MISSING_INTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 820,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 821,
+      "predicted": "MISSING_INTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 822,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 823,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 824,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 825,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 826,
+      "predicted": "MISSING_INTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 827,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 828,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 829,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 830,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 831,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": false,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 832,
+      "predicted": "MISSING_INTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 833,
+      "predicted": "MISSING_INTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 834,
+      "predicted": "MISSING_INTERNAL",
+      "actual": "MISSING_INTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 835,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    },
+    {
+      "break_id": 836,
+      "predicted": "AMT_FAT_FINGER",
+      "actual": "AMT_FAT_FINGER",
+      "correct": true,
+      "confidence": 0.72
+    },
+    {
+      "break_id": 837,
+      "predicted": "DUP_EXTERNAL",
+      "actual": "DUP_EXTERNAL",
+      "correct": true,
+      "confidence": 0.85
+    }
+  ]
+}
