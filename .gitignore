@@ -1,0 +1,23 @@
+# Java
+engine/target/
+*.class
+
+# Python
+agent/.venv/
+agent/__pycache__/
+agent/*.egg-info/
+**/__pycache__/
+*.pyc
+.env
+
+# Node
+dashboard/node_modules/
+dashboard/dist/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Docker
+.docker/
